@@ -7,10 +7,10 @@ const Hero = () => {
     
       {/* Left Content (Stacks on mobile, inline on larger screens) */}
     <div className="md:w-1/2 text-center md:text-left">
-        <h1 className="text-3xl md:text-5xl font-bold mb-4">
+        <h1 className="text-5xl md:text-5xl font-bold mb-4">
         One Link, Unlimited Possibilities! 
         </h1>
-        <p className="text-gray-300 text-sm md:text-base mb-6">
+        <p className="text-black text-lg md:text-base mb-6">
         Stop losing traffic!, Share all your important links in one place—socials, store, blog, and more. <br />
         Boost engagement, track clicks, and grow your brand effortlessly.
         </p>

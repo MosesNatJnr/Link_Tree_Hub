@@ -4,7 +4,7 @@ import { logo } from "../assets/images"
 const Header = () => {
   return (
     
-      <header className="flex justify-between items-center px-6 md:px-12 py-4 bg-white shadow-md">
+      <header className="flex justify-between items-center px-6 md:px-12 py-4 bg-green-600 text-white shadow-md">
 
     {/* logo */}
 
@@ -16,15 +16,13 @@ const Header = () => {
     {/* nav bar */}
 
     <nav className="hidden md:flex text-black space-x-6">
-      <Link to="/signin" className=" hover:text-green-700">Sign In</Link>
-      <Link to="signup" className=" hover:text-green-700">Sign Up</Link>
-      <Link to="#" className=" hover:text-green-700">FAQs</Link>
+      <Link to="/signin" className=" text-white hover:text-green-700 ">Sign In</Link>
+      <Link to="signup" className="text-white hover:text-green-700 ">Sign Up</Link>
+      <Link to="#" className="text-white hover:text-green-700 ">FAQs</Link>
     </nav>
 
 
-    {/* <button className="hidden md:block bg-primary text-white px-4 py-2 rounded-md">
-      Hello
-    </button> */}
+  
   </header>
   )
 }

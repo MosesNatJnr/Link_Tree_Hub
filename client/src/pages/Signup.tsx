@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { logo, signup } from "../assets/images";
 import { baseUrl } from "../utils/constants";
+import Header from "../components/Header";
 
 const Signup = () => {
 const [formData, setFormData] = useState({
@@ -21,9 +22,9 @@ const [popUp, setPopUp] = useState(false)
 const navigate = useNavigate()
 useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/profile")
+    navigate("/profile")
     }  
-  },[])
+},[])
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -78,43 +79,54 @@ const handleSubmit = async(e: React.FormEvent) => {
 };
 
 return (
-    <div>
+    <div  className="flex flex-col h-screen justify-between">
+        <Header/>
         {popUp && (
-            <div className="fixed z-30 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] flex items-center justify-center">
+            <div className="fixed z-30 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] flex items-center ">
                 <p onClick={()=>setPopUp(false)}>x</p>
 
                 <Link to={'/'}> Go back to home page</Link>
             </div>)}
 
 
+{/* 
         <Link to={'/'} className="absolute top-4 md:left-12 left-6 size-10">
         <img src={logo} alt="" />
-        </Link>
+        </Link> */}
 
     <div className="flex min-h-screen">
     <div className="w-full lg:w-1/2 flex items-center justify-center px-8">
         <div className="max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6">Get Started Now</h2>
+        <h2 className="text-4xl text-green-600 font-bold mb-6">Let's Get Started </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 space-x-2  border-green-600 px-3 py-6 rounded-lg shadow-lg">
+        <label >
+        First Name
             <input
             type="text"
             name="firstName"
             value={formData.firstName}
-            placeholder="Enter your first name"
+            placeholder="First Name"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
             />
+        </label>
+        <label >
+            Last Name
+
             <input
             type="text"
             name="lastName"
             value={formData.lastName}
-            placeholder="Enter your last name"
+            placeholder=" Last Name"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
             />
+        </label>
+        <label >
+            UserName
             <input
             type="username"
             name="userName"
@@ -124,7 +136,9 @@ return (
             onChange={handleChange}
             required
             />
-
+        </label>
+<label>
+    Email
             <input
             type="email"
             name="email"
@@ -134,26 +148,32 @@ return (
             onChange={handleChange}
             required
             />
-
+</label>
+<label>
+    Password
             <input
             type="password"
             name="password"
             value={formData.password}
-            placeholder="Enter your password"
+            placeholder="Create Password"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
             />
-            
+</label>
+            <label>
+                Confirm Password
+
             <input
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
-            placeholder="Confirm your password"
+            placeholder="Confirm Password"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
             />
+            </label>
 
             <div className="flex items-center">
             <input
@@ -177,6 +197,7 @@ return (
             type="submit"
             className="w-full bg-green-700 disabled:bg-gray-400 text-white py-2 rounded-md hover:bg-green-800"
             >
+
             {loading?"Loading": "Signup"}
             </button>
         </form>

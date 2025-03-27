@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { login } from "../assets/images";
 import Footer from "../components/Footer";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/constants";
+import Links from "./Links";
+import Header from "../components/Header";
 const Signin = () => {
   const [formData, setFormData] = useState({
     identifier: "",
@@ -53,14 +55,17 @@ const handleSubmit = async(e: React.FormEvent) => {
 
   return (
     <div>
+      <div>
+        <Header/>
+      </div>
       <div className="flex flex-col lg:flex-row min-h-screen">
         <div className="flex-1 flex flex-col justify-center items-center p-8">
-          <h2 className="text-3xl font-bold mb-4">Welcome back!</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-6xl text-green-600 font-bold mb-4">Welcome back!</h2>
+          <p className="text-black text-2xl  mb-6">
             Enter your Credentials to access your account
           </p>
 
-          <form className="w-full max-w-sm" onSubmit={handleSubmit}>
+          <form className="space-y-4 space-x-2  border-green-600 px-3 py-6 rounded-lg shadow-lg" onSubmit={handleSubmit}>
             <label className="block text-sm font-medium">Email address</label>
             <input
               type="text"
@@ -96,9 +101,9 @@ const handleSubmit = async(e: React.FormEvent) => {
 
           <p className="mt-4 text-sm">
             Don’t have an account?{" "}
-            <a href="#" className="text-blue-600">
+            <Link to="/signup" className="text-blue-600">
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
 
