@@ -1,6 +1,43 @@
+import { useEffect, useState } from "react";
+import { baseUrl } from "../utils/constants";
+import Loader from "../components/Loader";
+import api from "../utils/api";
 
+interface UserData{
+  _id: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  links: [];
+}
 const Profile = () => {
+  const [userData, setUserData] = useState<UserData>()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  useEffect(() => {
+const getUserData= async()=>{
+  try {
+    setLoading(true);
+    const response = await api.get(`${baseUrl}/api/user/profile`);
+    if (response.status === 200) {
+      setUserData(response.data);
+    }
+  } catch (error: any) {
+    if (error.status === 401) {
+      localStorage.removeItem("token")
+    }
+    console.error(error);
+  }
+  setLoading(false);
+}
+getUserData()
+  
+  },[])
   return (
+    loading?<div>
+      <Loader/>
+    </div> :
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
       <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
         
@@ -8,8 +45,8 @@ const Profile = () => {
         <div className="flex flex-col items-center">
 
           <input type="file" accept="image" placeholder="client\src\media\profilePlaceholder.jpg"className="w-20 h-20 rounded-full object-cover" />
-          <h2 className="mt-4 text-xl font-semibold">Your Name</h2>
-          <p className="text-gray-500">yourname@gmail.com</p>
+          <h2 className="mt-4 text-xl font-semibold">{userData?.firstName} {userData?.lastName}</h2>
+          <p className="text-gray-500">{userData?.email}</p>
         
         </div>
 

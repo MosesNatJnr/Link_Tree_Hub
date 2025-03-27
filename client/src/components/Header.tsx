@@ -1,30 +1,31 @@
-// import img from "client\src\media\logo.png"
+import { Link } from "react-router-dom"
+import { logo } from "../assets/images"
 
 const Header = () => {
   return (
-    <div>
+    
       <header className="flex justify-between items-center px-6 md:px-12 py-4 bg-white shadow-md">
 
     {/* logo */}
 
-    <div className="flex items-center space-x-2">
-    <img src="client\src\media\logo.png" alt="" width={30} height={30}/>
+    <Link to="/" className="flex items-center space-x-2">
+    <img src={logo} alt="" width={30} height={30}/>
       <span className="text-lg font-bold">LinkTree Hub</span>
-    </div>
+    </Link>
 
-{/* nav bar */}
+    {/* nav bar */}
 
-    <nav className="hidden md:flex space-x-6">
-      <a href="#" className="text-white hover:text-green-700">Sign In</a>
-      <a href="#" className="text-white hover:text-green-700">Sign Up</a>
-      <a href="#" className="text-white hover:text-green-700">FAQs</a>
+    <nav className="hidden md:flex text-black space-x-6">
+      <Link to="/signin" className=" hover:text-green-700">Sign In</Link>
+      <Link to="signup" className=" hover:text-green-700">Sign Up</Link>
+      <Link to="#" className=" hover:text-green-700">FAQs</Link>
     </nav>
 
 
-    <button className="hidden md:block bg-primary text-white px-4 py-2 rounded-md">
+    {/* <button className="hidden md:block bg-primary text-white px-4 py-2 rounded-md">
       Hello
-    </button>
-  </header></div>
+    </button> */}
+  </header>
   )
 }
 

@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { logo, signup } from "../assets/images";
+import { baseUrl } from "../utils/constants";
 
 const Signup = () => {
 const [formData, setFormData] = useState({
@@ -7,8 +11,19 @@ const [formData, setFormData] = useState({
     lastName:"",
     userName:"",
     email: "",
-    password: ""
+    password: "",
+    confirmPassword: "",
+    terms: false,
 });
+const [error, setError] = useState("")
+const [loading, setLoading] = useState(false)
+const [popUp, setPopUp] = useState(false)
+const navigate = useNavigate()
+useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/profile")
+    }  
+  },[])
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -18,15 +33,65 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     }));
 };
 
-const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setError("");
+    if (
+    formData.firstName.trim() === "" ||
+    formData.lastName.trim() === "" ||
+    formData.userName.trim() === "" ||
+    formData.email.trim() === "" ){
+        setError("All fields are required");
+        return;
+    }
+    if (formData.password.trim() !== formData.confirmPassword.trim()) {
+        setError("Passwords are required");
+        return;
+    }
+
+    if (!formData.terms) {
+        setError("You must agree to the terms and conditions");
+        return;
+    }
+
+    // Simulate API call to create a new user   
+    try {
+        setLoading(true);
+        const response = await axios.post(`${baseUrl}/api/user/register`, {
+            userName:formData.userName, 
+            firstName:formData.firstName, 
+            lastName:formData.lastName, 
+            password:formData.password, 
+            email:formData.email
+        })
+        if (response.status === 201) {
+            setError("");
+            setPopUp(true)
+        }
+        console.log("Form submitted:", formData);
+    } catch (error:any) {
+        setError(error.response.data.message);        
+        console.log();  
+    }
+    setLoading(false);
+    
 };
 
 return (
-    <div className="flex min-h-screen">
-    
+    <div>
+        {popUp && (
+            <div className="fixed z-30 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] flex items-center justify-center">
+                <p onClick={()=>setPopUp(false)}>x</p>
 
+                <Link to={'/'}> Go back to home page</Link>
+            </div>)}
+
+
+        <Link to={'/'} className="absolute top-4 md:left-12 left-6 size-10">
+        <img src={logo} alt="" />
+        </Link>
+
+    <div className="flex min-h-screen">
     <div className="w-full lg:w-1/2 flex items-center justify-center px-8">
         <div className="max-w-md w-full">
         <h2 className="text-2xl font-bold mb-6">Get Started Now</h2>
@@ -34,7 +99,8 @@ return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <input
             type="text"
-            name="First Name"
+            name="firstName"
+            value={formData.firstName}
             placeholder="Enter your first name"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
@@ -42,15 +108,17 @@ return (
             />
             <input
             type="text"
-            name="Last Name"
-            placeholder="Enter your name"
+            name="lastName"
+            value={formData.lastName}
+            placeholder="Enter your last name"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
             />
             <input
             type="username"
-            name="Username"
+            name="userName"
+            value={formData.userName}
             placeholder="Create Username"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
@@ -60,6 +128,7 @@ return (
             <input
             type="email"
             name="email"
+            value={formData.email}
             placeholder="Enter your email"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
@@ -69,7 +138,18 @@ return (
             <input
             type="password"
             name="password"
+            value={formData.password}
             placeholder="Enter your password"
+            className="w-full px-4 py-2 border rounded-md focus:outline-none"
+            onChange={handleChange}
+            required
+            />
+            
+            <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            placeholder="Confirm your password"
             className="w-full px-4 py-2 border rounded-md focus:outline-none"
             onChange={handleChange}
             required
@@ -79,6 +159,7 @@ return (
             <input
                 type="checkbox"
                 name="terms"
+                checked={formData.terms}
                 id="terms"
                 className="mr-2"
                 onChange={handleChange}
@@ -89,30 +170,36 @@ return (
             </label>
             </div>
 
+            {error ? <p className="text-red-500">{error}</p>: <p className="h-[1lh]"></p>}
+
             <button
+            disabled={loading}
             type="submit"
-            className="w-full bg-green-700 text-white py-2 rounded-md hover:bg-green-800"
+            className="w-full bg-green-700 disabled:bg-gray-400 text-white py-2 rounded-md hover:bg-green-800"
             >
-            Signup
+            {loading?"Loading": "Signup"}
             </button>
         </form>
 
-        <p className="mt-4 text-sm text-center">
-            Have an account already? <a href="#" className="text-blue-600">Sign In</a>
-        </p>
+        <span className="mt-4 text-sm text-center">
+            Have an account already? 
+        </span>
+            <Link to="/signin" className="text-blue-600 cursor-pointer">Sign In</Link>
         </div>
     </div>
 
 
     <div className="hidden lg:block w-1/2">
         <img
-        src="client\src\media\3301602.jpg"
+        src={signup}
         alt="Signup"
         className="h-full w-full object-cover"
         />
     </div>
+    </div>
     <Footer/>
     </div>
+
 );
 };
 export default Signup

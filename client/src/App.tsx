@@ -6,6 +6,7 @@ import SignIn from './pages/Signin'
 import Profile from './pages/Profile'
 import Links from './pages/Links'
 import Terms from './pages/Terms'
+import NotFound from './pages/NotFound'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
 <Route path="/profile" element={<Profile />} />
 <Route path="/terms" element={<Terms />} />
 <Route path="/links/:username" element={<Links />} />
+<Route path="*" element={<NotFound />} />
   
   </Routes>
   </BrowserRouter>
