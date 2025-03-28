@@ -98,7 +98,7 @@ const Profile = () => {
     }
     try {
       setLoading(true);
-      const response = await api.delete(`/api/user/delete/${delTitle}`);
+      await api.delete(`/api/user/delete/${delTitle}`);
         setDelLinkMesssage("Link deleted successfully");
         setDelTitle("");
     } catch (error:any) {
@@ -119,17 +119,17 @@ const Profile = () => {
         <div className="w-full max-w-lg  shadow-lg rounded-sm">
           <div className="flex flex-col items-center bg-white">
             <img src={profilePlaceholder} className="size-40" />
-            <h1 className="mt-4 text-xl text-green-600 font-semibold">
+            <h1 className="mt-4 text-4xl text-green-600 font-semibold">
               {userData?.firstName} {userData?.lastName}
             </h1>
             <p className="text-green-500">{userData?.email}</p>
+          <Link to={`/links/${userData?.userName}`} className="text-sm bg-green-600 text-white p-4 py-2 mt-2 rounded-full">View My Link Tree</Link>
           </div>
-          <Link to={`/links/${userData?.userName}`}>View My Link Tree</Link>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center bg-white"
+            className="flex flex-col bg-white gap-2"
           >
-            <label className="text-2xl text-green-600">
+            <label>
               Title
               <input
                 type="text"
@@ -137,10 +137,10 @@ const Profile = () => {
                 value={newLink.title}
                 name="title"
                 onChange={handleChange}
-                className="w-full border p-2 rounded-lg"
-              />
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                />
             </label>
-            <label className="text-2xl text-green-600">
+            <label>
               Description
               <input
                 type="text"
@@ -148,10 +148,10 @@ const Profile = () => {
                 onChange={handleChange}
                 placeholder="Add Description"
                 value={newLink.description}
-                className="w-full border p-2 rounded-lg"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
               />
             </label>
-            <label className="text-2xl text-green-600">
+            <label>
               URL
               <input
                 type="text"
@@ -159,44 +159,40 @@ const Profile = () => {
                 name="url"
                 value={newLink.url}
                 onChange={handleChange}
-                className="w-full border p-2 rounded-lg"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
               />
             </label>
             {error ? (
                 <p className="text-red-500">{error}</p>
-              ) : (
-                <p className="h-[1lh]"></p>
-              )}
-            {newlinkMessage ? (
+              ) : 
+              newlinkMessage ? (
                 <p className="text-green-600">{newlinkMessage}</p>
               ) : (
                 <p className="h-[1lh]"></p>
               )}
             <button
               type="submit"
-              className="mt-2 w-md h-10 bg-green-500 text-white py-2 rounded-lg hover:bg-green-700 flex items-center justify-center"
+              className="mt-2 w-md self-center h-10 bg-green-500 text-white py-2 rounded-lg hover:bg-green-700 flex items-center justify-center"
             >
               Submit
             </button>
           </form>
           <hr className="mt-5 bg-red-600" />
-          <form onSubmit={handleDelete} className="flex flex-col items-center mt-4 bg-gray-400 text-red-600">
-            <label className="text-2xl">
+          <form onSubmit={handleDelete} className="flex flex-col mt-4 text-red-600">
+            <label className="">
               Delete Link
               <input
                 type="text"
                 onChange={(e) => setDelTitle(e.target.value)}
                 placeholder="Delete Link By Name"
                 value={delTitle}
-                className="w-full border p-2 rounded-lg"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none"
               />
               </label>
               {delError ? (
                 <p className="text-red-500">{delError}</p>
-              ) : (
-                <p className="h-[1lh]"></p>
-              )}
-            {delLinkMessage ? (
+              ) : 
+            delLinkMessage ? (
                 <p className="text-green-600">{delLinkMessage}</p>
               ) : (
                 <p className="h-[1lh]"></p>
@@ -204,7 +200,7 @@ const Profile = () => {
               <button
                 type="submit"
                 // onClick={}
-                className="mt-2 w-md h-10 text-2 bg-red-500 text-white py-2 rounded-lg hover:bg-red-700 flex items-center justify-center"
+                className="mt-2 w-md self-center h-10 text-2 bg-red-500 text-white py-2 rounded-lg hover:bg-red-700 flex items-center justify-center"
               >
                 Submit
               </button>

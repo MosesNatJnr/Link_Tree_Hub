@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { logo, signup } from "../assets/images";
+import { signup } from "../assets/images";
 import { baseUrl } from "../utils/constants";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
