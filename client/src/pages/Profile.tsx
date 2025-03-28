@@ -75,7 +75,7 @@ const Profile = () => {
     try {
       console.log("trying to submit...");
       
-      await api.post("http://localhost:3000/api/user/add-link", newLink)
+      await api.post(`/api/user/add-link`, newLink)
         setNewLink({
           url: "",
           description: "",

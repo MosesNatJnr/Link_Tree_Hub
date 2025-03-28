@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 
-import React from '@vitejs/plugin-react-swc'
 import react from '@vitejs/plugin-react-swc'
 
 // https://vite.dev/config/
