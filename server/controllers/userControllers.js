@@ -15,6 +15,7 @@ export const linkProfile =async(req,res)=>{
     const {userName} = req.params
     try {
         const user = await User.findOne({userName}).select("-password")
+        console.log(user);
         res.json(user)
     } catch (error) {
         console.error(error);

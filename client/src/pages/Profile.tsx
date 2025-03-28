@@ -5,115 +5,221 @@ import api from "../utils/api";
 import Altheadr from "../components/Altheadr";
 import Footer from "../components/Footer";
 import { profilePlaceholder } from "../assets/images";
+import { Link, useNavigate } from "react-router-dom";
 
-
-interface UserData{
+export interface UserData {
   _id: string;
   firstName: string;
   lastName: string;
   userName: string;
   email: string;
-  links: [];
+  links: [{
+    url: string;
+    description: string;
+    title: string;
+  }];
 }
 const Profile = () => {
-  const [userData, setUserData] = useState<UserData>()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [newlinkMessage, setNewLinkMesssage] = useState("");
+  const [delLinkMessage, setDelLinkMesssage] = useState("");
+  const [delTitle, setDelTitle] = useState("");
+  const [userData, setUserData] = useState<UserData>();
+  const [newLink, setNewLink] = useState({
+    url: "",
+    description: "",
+    title: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [delError, setDelError] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
-const getUserData= async()=>{
-  try {
-    setLoading(true);
-    const response = await api.get(`${baseUrl}/api/user/profile`);
-    if (response.status === 200) {
-      setUserData(response.data);
+    const getUserData = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`${baseUrl}/api/user/profile`);
+        if (response.status === 200) {
+          setUserData(response.data);
+        }
+      } catch (error: any) {
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/");
+        }
+        console.error(error);
+      }
+      setLoading(false);
+    };
+    getUserData();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewLink((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (
+     newLink.title.trim() === "" ||
+     newLink.description.trim() === "" ||
+     newLink.url.trim() === ""
+    ) {
+      setError("All fields are required");
+      return;
     }
-  } catch (error: any) {
-    if (error.status === 401) {
-      localStorage.removeItem("token")
-    }
-    console.error(error);
-  }
-  setLoading(false);
-}
-getUserData()
-  
-  },[])
-  return (
-    loading?<div>
-      <Loader/>
-    </div>
-     :
-     <div>
+    try {
+      console.log("trying to submit...");
       
-      <Altheadr/>
+      await api.post("http://localhost:3000/api/user/add-link", newLink)
+        setNewLink({
+          url: "",
+          description: "",
+          title: "",
+        });
+        setNewLinkMesssage("Link added successfully");
+      
+    } catch (error:any) {
+      setError(error.message);
+      console.error(error.message);
+      
+    }
+  };
+  const handleDelete = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setDelError("");
+    if (delTitle.trim()==="") {
+      setDelError("A title must be specified");
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await api.delete(`/api/user/delete/${delTitle}`);
+        setDelLinkMesssage("Link deleted successfully");
+        setDelTitle("");
+    } catch (error:any) {
+      setDelError(error.response.data.message);
+    
+    }
+    setLoading(false);
+  }
 
-
-    <div className="min-h-screen  flex items-center justify-center bg-white p-24">
-      <div className="w-full max-w-lg  shadow-lg rounded-sm">
-        
-        
-        <div className="flex flex-col items-center bg-white">
-          <img src={profilePlaceholder} className="size-40" />
-          <h1 className="mt-4 text-xl text-green-600 font-semibold">{userData?.firstName} {userData?.lastName}</h1>
-          <p className="text-green-500">{userData?.email}</p>
-
+  return loading ? (
+    <div>
+      <Loader />
+    </div>
+  ) : (
+    <div>
+      <Altheadr />
+      <div className="min-h-screen  flex items-center justify-center bg-white p-24">
+        <div className="w-full max-w-lg  shadow-lg rounded-sm">
+          <div className="flex flex-col items-center bg-white">
+            <img src={profilePlaceholder} className="size-40" />
+            <h1 className="mt-4 text-xl text-green-600 font-semibold">
+              {userData?.firstName} {userData?.lastName}
+            </h1>
+            <p className="text-green-500">{userData?.email}</p>
           </div>
-        <div className="flex flex-col items-center bg-white">
-          <label className="text-2xl text-green-600">
-            Link Title 
-
-        <input type="text"  
-            placeholder="Add new link"
-            value=""
-            className="w-full border p-2 rounded-lg"  />
-        
-          </label>
-          <label className="text-2xl text-green-600">
-            Description  
-
-        <input type="text"  
-            placeholder="Link Description"
-            value=""
-            className="w-full border p-2 rounded-lg"  />
-         
-          </label>
-          <label className="text-2xl text-green-600">
-            Add New Link 
-
-        <input type="text"  
-            placeholder="Add new link"
-            value=""
-            className="w-full border p-2 rounded-lg"  />
-          <button type="submit"
-            // onClick={}
-            className="mt-2 w-md h-10 bg-green-500 text-white py-2 rounded-lg hover:bg-green-700 flex items-center justify-center">Submit</button>
-          </label>
-        
-          </div>
-          <hr className="mt-5 bg-red-600"/>
-        <div className="flex flex-col items-center mt-4 bg-gray-400 text-red-600">
-          <label className="text-2xl">
-            Delete Link 
-
-        <input type="text" 
-            placeholder="Delete Link By Name"
-            value=""
-            className="w-full border p-2 rounded-lg"  />
-          <button type="submit"
-            // onClick={}
-            className="mt-2 w-md h-10 text-2 bg-red-500 text-white py-2 rounded-lg hover:bg-red-700 flex items-center justify-center">Submit</button>
-          </label>
-          <label className="flex items-center text-sm">
-                <input type="checkbox" className="mr-2" /> Are You Sure You Want To Delete Link ?
+          <Link to={`/links/${userData?.userName}`}>View My Link Tree</Link>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-center bg-white"
+          >
+            <label className="text-2xl text-green-600">
+              Title
+              <input
+                type="text"
+                placeholder="Add Title"
+                value={newLink.title}
+                name="title"
+                onChange={handleChange}
+                className="w-full border p-2 rounded-lg"
+              />
             </label>
-          </div>
+            <label className="text-2xl text-green-600">
+              Description
+              <input
+                type="text"
+                name="description"
+                onChange={handleChange}
+                placeholder="Add Description"
+                value={newLink.description}
+                className="w-full border p-2 rounded-lg"
+              />
+            </label>
+            <label className="text-2xl text-green-600">
+              URL
+              <input
+                type="text"
+                placeholder="Add URL"
+                name="url"
+                value={newLink.url}
+                onChange={handleChange}
+                className="w-full border p-2 rounded-lg"
+              />
+            </label>
+            {error ? (
+                <p className="text-red-500">{error}</p>
+              ) : (
+                <p className="h-[1lh]"></p>
+              )}
+            {newlinkMessage ? (
+                <p className="text-green-600">{newlinkMessage}</p>
+              ) : (
+                <p className="h-[1lh]"></p>
+              )}
+            <button
+              type="submit"
+              className="mt-2 w-md h-10 bg-green-500 text-white py-2 rounded-lg hover:bg-green-700 flex items-center justify-center"
+            >
+              Submit
+            </button>
+          </form>
+          <hr className="mt-5 bg-red-600" />
+          <form onSubmit={handleDelete} className="flex flex-col items-center mt-4 bg-gray-400 text-red-600">
+            <label className="text-2xl">
+              Delete Link
+              <input
+                type="text"
+                onChange={(e) => setDelTitle(e.target.value)}
+                placeholder="Delete Link By Name"
+                value={delTitle}
+                className="w-full border p-2 rounded-lg"
+              />
+              </label>
+              {delError ? (
+                <p className="text-red-500">{delError}</p>
+              ) : (
+                <p className="h-[1lh]"></p>
+              )}
+            {delLinkMessage ? (
+                <p className="text-green-600">{delLinkMessage}</p>
+              ) : (
+                <p className="h-[1lh]"></p>
+              )}
+              <button
+                type="submit"
+                // onClick={}
+                className="mt-2 w-md h-10 text-2 bg-red-500 text-white py-2 rounded-lg hover:bg-red-700 flex items-center justify-center"
+              >
+                Submit
+              </button>
+            {/* <label className="flex items-center text-sm">
+              <input type="checkbox" className="mr-2" /> Are You Sure You Want
+              To Delete Link ?
+            </label> */}
+          </form>
+        </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
-    <div>
-      <Footer/>
-    </div>
-     </div>
   );
-}
+};
 
-export default Profile
+export default Profile;
