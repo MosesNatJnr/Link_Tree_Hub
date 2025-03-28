@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../assets/images";
 import { baseUrl } from "../utils/constants";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import Loader from "../components/Loader";
 
 const Signup = () => {
@@ -85,7 +85,7 @@ const Signup = () => {
     </div>
   ) : (
     <div className="flex flex-col h-screen justify-between">
-      <Header />
+      {/* <Header /> */}
       {popUp && (
         <div className="fixed z-30 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] flex items-center ">
           <p

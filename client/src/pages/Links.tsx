@@ -44,7 +44,7 @@ const Links = () => {
       <img src={logo} className="size-14" alt="" />
       </Link>
       <p className="text-6xl font-bold">{userData?.firstName} {userData?.lastName}</p>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col w-[90%] gap-6">
       {userData?.links.map((link, index) => (
         <div
           key={index}
