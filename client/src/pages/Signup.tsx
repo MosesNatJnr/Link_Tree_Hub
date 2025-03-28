@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logo, signup } from "../assets/images";
 import { baseUrl } from "../utils/constants";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 
 const Signup = () => {
 const [formData, setFormData] = useState({
@@ -78,14 +79,18 @@ const handleSubmit = async(e: React.FormEvent) => {
     
 };
 
-return (
+return (   loading?<div>
+    <Loader/>
+  </div>
+   :
     <div  className="flex flex-col h-screen justify-between">
         <Header/>
         {popUp && (
             <div className="fixed z-30 top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] flex items-center ">
-                <p onClick={()=>setPopUp(false)}>x</p>
+                <p className="p-2 bg-gray-800 hover:bg-red-600 text-white rounded-full transition-all duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+      aria-label="Close" onClick={()=>setPopUp(false) }>x</p>
 
-                <Link to={'/'}> Go back to home page</Link>
+                <Link className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400" to={'/'}> Go back to home page</Link>
             </div>)}
 
 
@@ -181,11 +186,11 @@ return (
                 name="terms"
                 checked={formData.terms}
                 id="terms"
-                className="mr-2"
+                className="mr-2 mt-3"
                 onChange={handleChange}
                 required
             />
-            <label htmlFor="terms" className="text-sm">
+            <label htmlFor="terms" className="text-sm mt-3">
                 I agree to the <a href="#" className="text-blue-600">terms & policy</a>
             </label>
             </div>

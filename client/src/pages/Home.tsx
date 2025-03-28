@@ -4,7 +4,8 @@ import Footer from "../components/Footer"
 
 const Home = () => {
     return (
-        <div className="flex flex-col h-screen justify-between">   
+        
+        <div className="flex flex-col h-screen justify-between ">   
     <Header/>
     <Hero/>
     <Footer/>

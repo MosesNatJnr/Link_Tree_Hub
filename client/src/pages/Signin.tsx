@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/constants";
 import Links from "./Links";
 import Header from "../components/Header";
+import Loader from "../components/Loader";
 const Signin = () => {
   const [formData, setFormData] = useState({
     identifier: "",
@@ -53,7 +54,10 @@ const handleSubmit = async(e: React.FormEvent) => {
   };
 
 
-  return (
+  return (   loading?<div>
+    <Loader/>
+  </div>
+   :
     <div>
       <div>
         <Header/>
@@ -66,7 +70,7 @@ const handleSubmit = async(e: React.FormEvent) => {
           </p>
 
           <form className="space-y-4 space-x-2  border-green-600 px-3 py-6 rounded-lg shadow-lg" onSubmit={handleSubmit}>
-            <label className="block text-sm font-medium">Email address</label>
+            <label className="block text-sm font-medium">Email address or Username</label>
             <input
               type="text"
               name="identifier"
@@ -89,7 +93,7 @@ const handleSubmit = async(e: React.FormEvent) => {
               <label className="flex items-center text-sm">
                 <input type="checkbox" className="mr-2" /> Remember for 30 days
               </label>
-              <a href="#" className="text-blue-600 text-sm">
+              <a href="#" className="text-blue-600 ml-2 text-sm">
                 Forgot password?
               </a>
             </div>
